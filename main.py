@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-import simpleaudio as sa
+import pygame
 
 st.set_page_config(
     layout="centered",
@@ -9,21 +9,24 @@ st.set_page_config(
     page_title="Hack Like a Girl Timer"
 )
 
+# Initialize Pygame Mixer
+pygame.mixer.init()
+
 # Function to play the ticking sound
 def play_ticking_sound():
-    tick_sound = sa.WaveObject.from_wave_file("tick.wav")
-    play_obj = tick_sound.play()
-    #play_obj.wait_done()  # Ensure the sound plays completely before moving on
+    tick_sound = pygame.mixer.Sound("tick.wav")
+    tick_sound.play()
 
 # Function to play the "Time-up" sound
 def play_time_up_sound():
-    time_up_sound = sa.WaveObject.from_wave_file("Time-up.wav")
-    play_obj = time_up_sound.play()
-    play_obj.wait_done()
+    time_up_sound = pygame.mixer.Sound("Time-up.wav")
+    time_up_sound.play()
+    while pygame.mixer.get_busy():  # Wait until the sound finishes playing
+        time.sleep(0.1)
 
 # Main Streamlit app
 def main():
-    st.title("Hack Like a Girl ⏳✨ ")
+    st.title("Hack Like a Girl Countdown ⏳✨ ")
     st.write("Set the duration for your timer below:")
 
     # Input for duration in minutes
