@@ -1,7 +1,5 @@
 import streamlit as st
 import time
-import pygame
-import io
 import base64
 from streamlit.components.v1 import html
 
@@ -12,36 +10,21 @@ st.set_page_config(
     page_title="Hack Like a Girl Timer"
 )
 
-# Initialize Pygame Mixer
-pygame.mixer.init()
-
-# Function to play the ticking sound
-def play_ticking_sound():
-    tick_sound = pygame.mixer.Sound("tick.wav")
-    tick_sound.play()
-
-# Function to play the "Time-up" sound
-def play_time_up_sound():
-    time_up_sound = pygame.mixer.Sound("Time-up.wav")
-    time_up_sound.play()
-    while pygame.mixer.get_busy():  # Wait until the sound finishes playing
-        time.sleep(0.1)
-
 # Function to convert sound file to base64 for browser playback
 def sound_to_base64(sound_file):
     with open(sound_file, "rb") as f:
         audio_data = f.read()
         return base64.b64encode(audio_data).decode()
 
-# Function to play the sound in the browser using HTML and JavaScript
+# Function to play the sound using JavaScript without displaying the audio player
 def play_audio_in_browser(audio_data):
-    audio_html = f"""
-    <audio controls autoplay>
-        <source src="data:audio/wav;base64,{audio_data}" type="audio/wav">
-        Your browser does not support the audio element.
-    </audio>
+    audio_js = f"""
+    <script>
+        var audio = new Audio("data:audio/wav;base64,{audio_data}");
+        audio.play();
+    </script>
     """
-    html(audio_html, height=100)
+    html(audio_js, height=0)  # Ensure no visual component is displayed
 
 # Main Streamlit app
 def main():
@@ -73,8 +56,10 @@ def main():
                 unsafe_allow_html=True,
             )
 
-            # Play the ticking sound for each second
-            play_ticking_sound()
+            # Play the ticking sound in the browser without showing the player
+            if remaining > 0:  # Play only for each tick, not when time is up
+                tick_audio_data = sound_to_base64("tick.wav")
+                play_audio_in_browser(tick_audio_data)
 
             # Wait exactly one second
             time.sleep(1)
@@ -89,10 +74,7 @@ def main():
             unsafe_allow_html=True,
         )
 
-        # Play the "Time-up" sound
-        play_time_up_sound()
-
-        # Play the "Time-up" sound in the browser
+        # Play the "Time-up" sound in the browser without showing the player
         time_up_audio_data = sound_to_base64("Time-up.wav")
         play_audio_in_browser(time_up_audio_data)
 
