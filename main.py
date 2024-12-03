@@ -2,8 +2,12 @@ import streamlit as st
 import time
 import simpleaudio as sa
 
-
-st.set_page_config(layout="centered", initial_sidebar_state="auto", page_icon=None, page_title="Timer App", theme={"base": "light"})
+st.set_page_config(
+    layout="centered",
+    initial_sidebar_state="auto",
+    page_icon="⏳",
+    page_title="Hack Like a Girl Timer"
+)
 
 # Function to play the ticking sound
 def play_ticking_sound():
@@ -19,7 +23,7 @@ def play_time_up_sound():
 
 # Main Streamlit app
 def main():
-    st.title("Hack Like a Girl Countdown ⏳✨ ")
+    st.title("Hack Like a Girl ⏳✨ ")
     st.write("Set the duration for your timer below:")
 
     # Input for duration in minutes
