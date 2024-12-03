@@ -2,6 +2,9 @@ import streamlit as st
 import time
 import simpleaudio as sa
 
+
+st.set_page_config(layout="centered", initial_sidebar_state="auto", page_icon=None, page_title="Timer App", theme={"base": "light"})
+
 # Function to play the ticking sound
 def play_ticking_sound():
     tick_sound = sa.WaveObject.from_wave_file("tick.wav")
